@@ -27,7 +27,7 @@ export default function DriverList() {
   };
 
   useEffect(() => {
-    const client = mqtt.connect("wss://116.118.95.187:8083/mqtt", {
+    const client = mqtt.connect("ws://116.118.95.187:8083/mqtt", {
       username: "ducchien0612",
       password: "123456",
     });
