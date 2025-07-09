@@ -12,11 +12,10 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-scripts": "^5.0.1",
-    "serve": "^14.2.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
- "start": "react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -44,8 +43,5 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "proxy": "http://localhost:3001",
-  "devDependencies": {
-    "cross-env": "^7.0.3"
-  }
+  "proxy": "http://localhost:3001"
 }

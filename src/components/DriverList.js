@@ -42,6 +42,7 @@ export default function DriverList() {
     client.on("close", () => addLog("🔒 Disconnected"));
 
     client.on("message", (topic, msg) => {
+      // ROUTE
       const rm = topic.match(/^car\/(.+)\/route$/);
       if (rm) {
         const id = rm[1];
@@ -71,6 +72,7 @@ export default function DriverList() {
         return;
       }
 
+      // TELEMETRY
       const tm = topic.match(/^car\/(.+)\/telemetry$/);
       if (!tm) return;
       const id = tm[1];
@@ -107,7 +109,7 @@ export default function DriverList() {
         }
       });
 
-      // auto-reset chỉ clear statusArr để ẩn cột & details
+      // auto-reset: clear chỉ statusArr để ẩn cột & details
       if (statusArr.length && statusArr.every((s) => s === 2)) {
         addLog(`✅ ${id} completed, auto‐reset`);
         showNotif(`Xe ${id} hoàn thành chuyến`);
@@ -122,7 +124,7 @@ export default function DriverList() {
           ...prev,
           [id]: {
             ...prev[id],
-            statusArr: [],
+            statusArr: [], // để ẩn
             position: pos,
           },
         }));
@@ -131,6 +133,7 @@ export default function DriverList() {
         prevStatusRef.current[id] = statusArr;
       }
 
+      // normal update
       setDrivers((prev) => ({
         ...prev,
         [id]: {
@@ -225,37 +228,33 @@ export default function DriverList() {
     },
     notif: {
       position: "fixed",
-      top: 16,
-      left: "50%",
-      transform: "translateX(-50%)",
-      background: "#fffae6",
+      top: 0,
+      left: 0,
+      width: "100%",
+      padding: "16px 0",
+      background: "#ffd700",
       color: "#333",
-      padding: "12px 24px",
-      border: "2px solid #ffd700",
-      borderRadius: 6,
+      fontSize: "18px",
+      fontWeight: "bold",
+      textAlign: "center",
       boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-      animation: "fadeNotif 5s forwards",
+      animation: "fadeNotif 10s forwards",
+      zIndex: 9999,
     },
   };
 
   return (
     <div style={s.wrapper}>
-      {/* keyframes */}
+      {/* keyframes for notification fade-out */}
       <style>{`
-        @keyframes fadeOut {
-          0% { opacity: 1; }
-          80% { opacity: 1; }
-          100% { opacity: 0; }
-        }
         @keyframes fadeNotif {
-          0% { opacity: 1; }
-          80% { opacity: 1; }
+          0%   { opacity: 1; }
+          90%  { opacity: 1; }
           100% { opacity: 0; }
         }
         .route-log {
           background: rgba(255,200,200,0.5);
           font-weight: bold;
-       
         }
       `}</style>
 
@@ -320,11 +319,9 @@ export default function DriverList() {
                   onMouseLeave={(e) => (e.currentTarget.style.background = bg)}
                 >
                   <td style={s.td}>{id}</td>
-                  <td style={s.td}>{position?.lat.toFixed(6) || "–"}</td>
-                  <td style={s.td}>{position?.lng.toFixed(6) || "–"}</td>
-                  <td style={s.td}>
-                    {statusArr.length > 0 ? statusArr.join(" ") : ""}
-                  </td>
+                  <td style={s.td}>{position?.lat.toFixed(6) ?? "–"}</td>
+                  <td style={s.td}>{position?.lng.toFixed(6) ?? "–"}</td>
+                  <td style={s.td}>{statusArr.join(" ")}</td>
                   <td style={s.td}>{btn}</td>
                 </tr>
               );
